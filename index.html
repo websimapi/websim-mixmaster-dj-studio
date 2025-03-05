@@ -1,0 +1,194 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MixMaster DJ Studio</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "tone": "https://cdn.skypack.dev/tone",
+            "wavesurfer.js": "https://cdn.skypack.dev/wavesurfer.js"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <svg class="logo-svg" viewBox="0 0 100 100" width="40" height="40">
+                    <circle cx="50" cy="50" r="45" fill="#333" />
+                    <circle cx="50" cy="50" r="20" fill="none" stroke="#ff5500" stroke-width="4" class="pulse" />
+                    <path d="M20,50 Q50,20 80,50 Q50,80 20,50" fill="none" stroke="#ff5500" stroke-width="2" />
+                </svg>
+                <h1>MixMaster DJ Studio</h1>
+            </div>
+            <div class="transport-controls">
+                <button id="play-pause" class="transport-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <polygon id="play-icon" points="8,5 19,12 8,19" fill="#fff" />
+                        <g id="pause-icon" style="display: none;">
+                            <rect x="6" y="5" width="4" height="14" fill="#fff" />
+                            <rect x="14" y="5" width="4" height="14" fill="#fff" />
+                        </g>
+                    </svg>
+                </button>
+                <div class="bpm-control">
+                    <span>BPM:</span>
+                    <input type="number" id="bpm-value" min="60" max="200" value="128">
+                    <input type="range" id="bpm-slider" min="60" max="200" value="128">
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="deck-container">
+                <!-- Deck A -->
+                <div class="deck" id="deck-a">
+                    <div class="deck-header">
+                        <h2>DECK A</h2>
+                        <input type="file" id="load-track-a" accept="audio/*" class="file-input">
+                        <label for="load-track-a" class="load-btn">LOAD TRACK</label>
+                    </div>
+                    <div class="waveform" id="waveform-a"></div>
+                    <div class="turntable">
+                        <svg viewBox="0 0 200 200" class="turntable-svg">
+                            <circle cx="100" cy="100" r="95" fill="#222" stroke="#444" stroke-width="2" />
+                            <circle cx="100" cy="100" r="40" fill="#111" stroke="#333" stroke-width="1" />
+                            <circle cx="100" cy="100" r="5" fill="#ff5500" />
+                            <line x1="100" y1="100" x2="170" y2="100" stroke="#ff5500" stroke-width="2" class="turntable-arm" />
+                            <circle cx="100" cy="100" r="93" fill="none" stroke="#333" stroke-width="0.5" stroke-dasharray="2,6" class="rotation-indicator" />
+                        </svg>
+                    </div>
+                    <div class="deck-controls">
+                        <div class="control-group">
+                            <label>VOLUME</label>
+                            <input type="range" class="volume-slider" id="volume-a" min="0" max="1" step="0.01" value="0.8">
+                        </div>
+                        <div class="control-group">
+                            <label>EQ</label>
+                            <div class="eq-controls">
+                                <div class="eq-knob">
+                                    <label>HIGH</label>
+                                    <input type="range" class="eq-slider" data-deck="a" data-band="high" min="-12" max="12" value="0" orient="vertical">
+                                </div>
+                                <div class="eq-knob">
+                                    <label>MID</label>
+                                    <input type="range" class="eq-slider" data-deck="a" data-band="mid" min="-12" max="12" value="0" orient="vertical">
+                                </div>
+                                <div class="eq-knob">
+                                    <label>LOW</label>
+                                    <input type="range" class="eq-slider" data-deck="a" data-band="low" min="-12" max="12" value="0" orient="vertical">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>FILTER</label>
+                            <input type="range" class="filter-slider" id="filter-a" min="0" max="1" step="0.01" value="0.5">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mixer Section -->
+                <div class="mixer">
+                    <div class="crossfader-container">
+                        <label>CROSSFADER</label>
+                        <input type="range" id="crossfader" min="0" max="1" step="0.01" value="0.5">
+                    </div>
+                    <div class="fx-section">
+                        <h3>EFFECTS</h3>
+                        <div class="fx-buttons">
+                            <button class="fx-btn" data-effect="delay">DELAY</button>
+                            <button class="fx-btn" data-effect="reverb">REVERB</button>
+                            <button class="fx-btn" data-effect="flanger">FLANGER</button>
+                            <button class="fx-btn" data-effect="bitcrush">BITCRUSH</button>
+                        </div>
+                        <div class="fx-amount">
+                            <label>AMOUNT</label>
+                            <input type="range" id="fx-amount" min="0" max="1" step="0.01" value="0.3">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deck B -->
+                <div class="deck" id="deck-b">
+                    <div class="deck-header">
+                        <h2>DECK B</h2>
+                        <input type="file" id="load-track-b" accept="audio/*" class="file-input">
+                        <label for="load-track-b" class="load-btn">LOAD TRACK</label>
+                    </div>
+                    <div class="waveform" id="waveform-b"></div>
+                    <div class="turntable">
+                        <svg viewBox="0 0 200 200" class="turntable-svg">
+                            <circle cx="100" cy="100" r="95" fill="#222" stroke="#444" stroke-width="2" />
+                            <circle cx="100" cy="100" r="40" fill="#111" stroke="#333" stroke-width="1" />
+                            <circle cx="100" cy="100" r="5" fill="#ff5500" />
+                            <line x1="100" y1="100" x2="170" y2="100" stroke="#ff5500" stroke-width="2" class="turntable-arm" />
+                            <circle cx="100" cy="100" r="93" fill="none" stroke="#333" stroke-width="0.5" stroke-dasharray="2,6" class="rotation-indicator" />
+                        </svg>
+                    </div>
+                    <div class="deck-controls">
+                        <div class="control-group">
+                            <label>VOLUME</label>
+                            <input type="range" class="volume-slider" id="volume-b" min="0" max="1" step="0.01" value="0.8">
+                        </div>
+                        <div class="control-group">
+                            <label>EQ</label>
+                            <div class="eq-controls">
+                                <div class="eq-knob">
+                                    <label>HIGH</label>
+                                    <input type="range" class="eq-slider" data-deck="b" data-band="high" min="-12" max="12" value="0" orient="vertical">
+                                </div>
+                                <div class="eq-knob">
+                                    <label>MID</label>
+                                    <input type="range" class="eq-slider" data-deck="b" data-band="mid" min="-12" max="12" value="0" orient="vertical">
+                                </div>
+                                <div class="eq-knob">
+                                    <label>LOW</label>
+                                    <input type="range" class="eq-slider" data-deck="b" data-band="low" min="-12" max="12" value="0" orient="vertical">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>FILTER</label>
+                            <input type="range" class="filter-slider" id="filter-b" min="0" max="1" step="0.01" value="0.5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-section">
+                <div class="looper">
+                    <h3>LOOP PADS</h3>
+                    <div class="loop-pads">
+                        <button class="loop-pad" data-beats="1">1</button>
+                        <button class="loop-pad" data-beats="2">2</button>
+                        <button class="loop-pad" data-beats="4">4</button>
+                        <button class="loop-pad" data-beats="8">8</button>
+                    </div>
+                </div>
+                
+                <div class="sample-pads">
+                    <h3>SAMPLE PADS</h3>
+                    <div class="pads-container">
+                        <button class="sample-pad" data-sample="kick">KICK</button>
+                        <button class="sample-pad" data-sample="snare">SNARE</button>
+                        <button class="sample-pad" data-sample="hihat">HI-HAT</button>
+                        <button class="sample-pad" data-sample="clap">CLAP</button>
+                        <button class="sample-pad" data-sample="tom">TOM</button>
+                        <button class="sample-pad" data-sample="crash">CRASH</button>
+                    </div>
+                </div>
+                
+                <div class="visualizer">
+                    <h3>VISUALIZER</h3>
+                    <canvas id="visualizer-canvas"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="app.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
